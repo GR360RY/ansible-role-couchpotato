@@ -1,0 +1,40 @@
+---
+# tasks file for couchpotato
+
+- name: Install Requirements
+  apt: pkg={{ item }} state=installed update_cache=yes cache_valid_time=3600
+  with_items:
+    - python-cheetah
+    - git
+
+- name: Make sure Couchpotato directory has correct ownership
+  file: path={{ couchpotato_path }} state=directory owner={{ htpc_user_username }} group={{ htpc_user_group }} recurse=yes
+
+- name: Get Couchpotato Code from GitHub
+  git: repo={{ couchpotato_repo }} dest={{ couchpotato_path }} version={{ couchpotato_version }} update=no
+  become: yes
+  become_user: "{{ htpc_user_username }}"
+
+- name: Update Couchpotato init.d script
+  template: src=init.{{ ansible_os_family }} dest=/etc/init.d/{{ couchpotato_init_script }} owner=root group=root mode=0755
+
+- name: Update Couchpotato Daemon configuration
+  template: src=etc_default_couchpotato dest=/etc/default/couchpotato owner=root group=root mode=0644
+
+- name: Create CouchPotato database and settings directory
+  file: path=/var/couchpotato state=directory owner={{ htpc_user_username }} group=root mode=0755
+
+- name: Run Couchpotato once to generate config files
+  service: name={{ couchpotato_init_script }} state=started pattern='/usr/bin/python CouchPotato.py'
+
+- name: Make sure Couchpotato is stopped before modifications
+  service: name={{ couchpotato_init_script }} state=stopped pattern='/usr/bin/python CouchPotato.py'
+
+- name: Update CouchPotato configuration
+  template: src=var_couchpotato_settings.conf.j2 dest=/var/couchpotato/settings.conf owner={{ htpc_user_username }} group={{ htpc_user_group }}
+
+# - name: Upload CouchPotato Database
+#   copy: src=couchpotato.db dest=/var/couchpotato/couchpotato.db owner={{ htpc_user_username }} group={{ htpc_user_group }}
+
+- name: Start Couchpotato and make sure it starts on boot
+  service: name={{ couchpotato_init_script }} state=started pattern='/usr/bin/python CouchPotato.py' enabled=yes
