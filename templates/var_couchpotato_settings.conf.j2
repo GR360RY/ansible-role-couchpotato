@@ -434,7 +434,7 @@ extra_score = 0
 [newznab]
 use = 0,0,0,0,0,0,1
 extra_score = 0,0,0,0,0,0,
-{% if sabnzbd_enabled is defined and sabnzbd_enabled %}
+{% if sabnzbd_enabled is defined and sabnzbd_enabled and usenet_crawler_api_key is defined %}
 enabled = True
 host = nzb.su,dognzb.cr,nzbs.org,https://index.nzbgeek.info,https://smackdownonyou.com,https://www.nzbfinder.ws,https://www.usenet-crawler.com/
 custom_tag = ,,,,,,
