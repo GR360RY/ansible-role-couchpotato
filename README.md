@@ -14,7 +14,9 @@ Overview
 
 List of tasks that will be performed under `couchpotato` role:
 
-
+1. Install and Configure Couchpotato
+2. Add integration with Sabnzbd and Deluge Download Clients
+3. Configure Kodi Notifications
 
 Role Variables
 --------------
@@ -62,7 +64,14 @@ htpc_downloads_incomplete: "{{ htpc_media_path }}/downloads/incomplete"
 
 Example Playbook
 -------------------------
+```
+---
+- hosts: htpc-server
+  become: yes
 
+  roles:
+    - role: GR360RY.couchpotato
+```
 
 HTPC-Ansible Project
 --------------------

@@ -33,8 +33,5 @@
 - name: Update CouchPotato configuration
   template: src=var_couchpotato_settings.conf.j2 dest=/var/couchpotato/settings.conf owner={{ htpc_user_username }} group={{ htpc_user_group }}
 
-# - name: Upload CouchPotato Database
-#   copy: src=couchpotato.db dest=/var/couchpotato/couchpotato.db owner={{ htpc_user_username }} group={{ htpc_user_group }}
-
 - name: Start Couchpotato and make sure it starts on boot
   service: name={{ couchpotato_init_script }} state=started pattern='/usr/bin/python CouchPotato.py' enabled=yes
