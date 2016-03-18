@@ -1,7 +1,7 @@
 couchpotato
 ===========
 
-An Ansible role to setup and configure  Couchpotato PVR for usenet and torrents on Ubuntu.
+An Ansible role to setup and configure Couchpotato PVR for usenet and torrents on Ubuntu.
 
 Requirements
 ------------
